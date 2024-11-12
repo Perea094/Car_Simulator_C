@@ -16,3 +16,6 @@ This project aims to create a simulator with object-oriented programming that co
 
 The object-oriented programming can be implemented by creating classes and objects that refer to the cars, environment, points, user iterface, etc.
 This programm could be created by using certain libraries for videogame development such as; "Allegro", "SFML", "SDL", between others.
+
+## Class Diagram
+![Descripción de la imagen](images/class_diagram.jpg)
