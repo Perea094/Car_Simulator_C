@@ -18,4 +18,4 @@ The object-oriented programming can be implemented by creating classes and objec
 This programm could be created by using certain libraries for videogame development such as; "Allegro", "SFML", "SDL", between others.
 
 ## Class Diagram
-![Descripción de la imagen](images/class_diagram.jpg)
+![Class diagram of the project Car simulation in C++](images/class_diagram.jpg)
