@@ -19,3 +19,8 @@ This programm could be created by using certain libraries for videogame developm
 
 ## Class Diagram
 ![Class diagram of the project Car simulation in C++](images/class_diagram(1).jpg)
+* **_Class_ Game** : This class refers the game and its current state. It also the information of other objects.
+* **_Class_ Track** : Composition of Game. Refers to the information about the track and checks for collisions.
+* **_Class_ Car** : Composition of Game. The Car used by the player.
+* **_Class_ Obstacle** : Composition of Game. 
+* **_Class_ EntityProperties** : Composition of Car and Obstacle. Properties of the objects.
