@@ -65,4 +65,8 @@ Below is the class diagram for the **Car Racing Simulator**:
 - A C++ compiler (e.g., GCC or MSVC).  
 - Basic knowledge of C++ and object-oriented programming.  
 ### Steps to Run  
-1. Clone the repository or download it  
+1. Clone the repository or download it
+---
+## License
+
+This project is licensed under the [MIT License](LICENSE).
