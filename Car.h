@@ -3,19 +3,29 @@
 
 #include "EntityProperties.h"
 
-class Car
+class Car : public EntityProperties
 {
     private:
-        std::string CarName;
-        std::string CarDirection;
-        float CarIntegrity = 100;
+        int fuel;
+        int coords[2];
+
+        float integrity; // Representa la integridad del coche
     public:
-        void set_CarName(std::string);
-        std::string get_CarName();
+        // Constructores
+        Car(); // Constructor por defecto
+        Car(const std::string&, const std::string&,
+            const std::string&, const std::string&, float);
+        // Setters
+        void setCoordX(int);
+        void setCoordY(int);
+        void setFuel(int);
+        void setIntegrity(float);
 
-        EntityProperties CarProperties;
-
-        bool check_integrity(bool);
+        // Getters
+        int getFuel() const;
+        int getCoordX() const;
+        int getCoordY() const;
+        float getIntegrity() const;
 };
 
 

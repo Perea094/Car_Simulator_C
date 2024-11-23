@@ -1,19 +1,35 @@
 #include "EntityProperties.h"
 
-void EntityProperties::set_EntityWidth(float width){Width = width;};
-void EntityProperties::set_EntityLength(float length){Length = length;};
-void EntityProperties::set_EntitySpeed(float speed){Speed = speed;};
-void EntityProperties::set_EntityColor(std::string color) {Color = color;};
+// Definimos el constructor predeterminado
+EntityProperties::EntityProperties() 
+    : shape("Z"), color("37"), name("undefined"), background("40") {}
 
-float EntityProperties::get_EntityWidth(){return Width;};
-float EntityProperties::get_EntityLength(){return Length;};
-float EntityProperties::get_EntitySpeed(){return Speed;};
-std::string EntityProperties::get_EntityColor(){return Color;};
+// Definimos el constructor
+EntityProperties::EntityProperties(const std::string& shape, const std::string& color, 
+                                   const std::string& name, const std::string& background)
+    : shape(shape), color(color), name(name), background(background) {}
 
-void EntityProperties::update_position(float X,float Y)
+//Method
+std::string EntityProperties::getFinalShape() const
 {
-    CoordXY[0] = X;
-    CoordXY[1] = Y;
-};
-float EntityProperties::retrieve_positionX(){return CoordXY[0];};
-float EntityProperties::retrieve_positionY(){return CoordXY[1];}
+    const std::string ansiPart1 = "\e[";
+    std::string ansiCommand = ansiPart1 + background + ";" + color + "m" + shape;
+    return ansiCommand;
+}
+
+void EntityProperties::setShape(const std::string& newShape) {shape = newShape;}
+
+void EntityProperties::setColor(const std::string& newColor) {color = newColor;}
+
+void EntityProperties::setName(const std::string& newName) {name = newName;}
+
+void EntityProperties::setBackground(const std::string& newBackground) {background = newBackground;}
+
+
+std::string EntityProperties::getShape() const {return shape;}
+
+std::string EntityProperties::getColor() const {return color;}
+
+std::string EntityProperties::getName() const {return name;}
+
+std::string EntityProperties::getBackground() const {return background;}

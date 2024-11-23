@@ -3,19 +3,27 @@
 
 #include "EntityProperties.h"
 
-class Obstacle
+class Obstacle : public EntityProperties
 {
     private:
-        std::string ObstacleType;
-        float ObstacleIntegrity = 1;
+        float damage; // Numero que afectara la integridad del coche
+        float probability; // La probabilidad de que aparezca
+        
 
     public:
-        void set_ObstacleType(std::string);
-        std::string get_ObstacleType();
+        // Constructores
+        Obstacle();
+        Obstacle(const std::string&, const std::string&,
+                const std::string&, const std::string&, float, float);
 
-        EntityProperties ObstacleProperties;
+        // Setters
+        void setDamage(float);
+        void setProbability(float);
 
-        bool check_integrity(bool);
+        // Getters
+        float getDamage() const;
+        float getProbability() const;
+
 };
 
 #endif
