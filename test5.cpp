@@ -10,25 +10,28 @@ const int FILAS = 5;    // Número de carriles
 const int COLUMNAS = 30;  // Longitud de la pista
 const float ObstacleProbability = 5; // Probabilidad de que se genere un obstáculo
 const float GalonProbability = 1.5;
+const float ObstacleProbability2 = 3;
 const std::string CarColor1 = "\033[31;40m";
 const std::string DEFAULT = "\033[0m";
 const std::string ObstacleColor1 = "\033[33;40m";
+const std::string ObstacleColor2 = "\033[37;40m";
 const std::string TrackColor1 = "\033[37;40m";
 const std::string GalonesColor = "\033[32;40m";
 
 const std::string Car1 = CarColor1 + "C";
 const std::string Obstacle1 = ObstacleColor1 + "#";
+const std::string Obstacle2 = ObstacleColor2 + "x";
 const std::string Path = TrackColor1 + "-";
 const std::string Galones = GalonesColor + "+";
 
-float difficulty = 2;
-/*int gameSpeedDeterminer(float diff){
-    int speed = 100 * (diff);
-    return speed;
-};*/
-int gameSpeed = 100 * difficulty;
-const bool progressiveDif = true;
+int CarIntegrity = 100;
 
+std::string difficultyName = "Normal";
+float difficulty = 2;
+int gameSpeed = 100 * difficulty;
+bool progressiveDif = true;
+
+int combustible = 100;
 
 void limpiarPantalla() {
     #ifdef _WIN32
@@ -61,6 +64,9 @@ void generarObstaculos(std::string pista[FILAS][COLUMNAS]) {
         }
         if (RangedRandInt(0,100) < GalonProbability) {  // Genera un obstáculo con probabilidad 
             pista[i][COLUMNAS - 1] = Galones;
+            }
+        if (RangedRandInt(0,100) < ObstacleProbability2) {  // Genera un obstáculo con probabilidad 
+            pista[i][COLUMNAS - 1] = Obstacle2;
             }
     }
 }
@@ -96,6 +102,10 @@ bool detectarGalon(std::string pista[FILAS][COLUMNAS], int carCoordY, int carCoo
     return pista[carCoordY][carCoordX] == Galones;  // Si hay un galón
 }
 
+bool detectarColision2(std::string pista[FILAS][COLUMNAS], int carCoordY, int carCoordX) {
+    return pista[carCoordY][carCoordX] == Obstacle2;  // Si hay un obstaculo 2
+}
+
 void printSpeed(int& velocimeter){
     float maxSpeed = (2 * 100 * difficulty) - (difficulty * 80) - gameSpeed;
     std::cout << "Velocidad: " << velocimeter << "km/h" << std::endl;
@@ -117,7 +127,6 @@ void jugar() {
     std::string pista[FILAS][COLUMNAS];
     int carCoordY = FILAS / 2;  // Posición inicial del coche en el carril del medio
     int carCoordX = 0;          // Posición inicial en la columna 0
-    int combustible = 100;
     int puntaje = 0;
     int velocimeter = 10;
     bool jugando = true;
@@ -125,7 +134,7 @@ void jugar() {
     limpiarPantalla();
     inicializarPista(pista);
 
-    while (jugando && combustible >= 0) {
+    while (jugando && combustible >= 0 && CarIntegrity > 0) {
         limpiarPantalla();
 
         // Generar y mover obstáculos
@@ -140,7 +149,13 @@ void jugar() {
             break;
         }
 
+        if (detectarColision2(pista,carCoordY, carCoordX)) {
+            CarIntegrity -=25;
+            pista[carCoordY][carCoordX] = Path;
+        }
+
         if (detectarGalon(pista, carCoordY, carCoordX)){
+            if (CarIntegrity < 100) {CarIntegrity += 10;}
             combustible += 20;
             pista[carCoordY][carCoordX] = Path;
         }
@@ -151,12 +166,13 @@ void jugar() {
             puntaje++;
         }
 
-        std::cout << DEFAULT << "Simulador de autos" << std::endl;
+        //std::cout << DEFAULT << "Simulador de autos" << std::endl;
         std::cout << "==============================" << std::endl;
         // Dibujar la pista, el coche y mostrar estadísticas
         dibujarPista(pista, carCoordY, carCoordX);
         std::cout << DEFAULT;
         std::cout << "==============================" << std::endl;
+        std::cout << "Integridad del Coche: " << CarIntegrity << "%" << std::endl;
         std::cout << "Combustible: " << combustible << "%" << std::endl;
         printSpeed(velocimeter);
         std::cout << "Puntaje: " << puntaje << std::endl;
@@ -185,9 +201,9 @@ void jugar() {
         // Pausa para simular tiempo real
         std::this_thread::sleep_for(std::chrono::milliseconds(gameSpeed));
     }
-
+    if (CarIntegrity < 0) {std::cout << "\nTu coche ya no funciona!\nFin del juego...\n";}
     if (combustible < 0) {
-        std::cout << "No tienes combustible!\nFin del juego." << std::endl;
+        std::cout << "\nNo tienes combustible!\nFin del juego..." << std::endl;
     }
 }
 
@@ -196,7 +212,7 @@ int gameMenu(){
     std::cout << menuLine << "\tWelcome to the \n    Car Racing Simulator!!" << menuLine;
     std::string userChoice = "☺";
     while (true) {
-        std::cout << "Select an option...\n 1) Start Game!\n 2) Set Difficulty\n 3) Personalization\n 4) Exit\n";
+        std::cout << "Select an option...\n 1) Start Game!\n 2) Set Difficulty\n 3) Personalization\n 4) Exit\n ";
         std::cin >> userChoice; std::cout << std::endl;
         if (userChoice == "1") {return 1;}
         else if (userChoice == "2") {return 2;}
@@ -207,28 +223,86 @@ int gameMenu(){
     return 0;
 }
 
-/*bool gameMenu1(){
-    std::string menuLine = "\n==============================\n";
-    std::cout << menuLine << "\tWelcome to the \n    Car Racing Simulator!!" << menuLine;
-    std::string userChoice = "☺";
-    while (userChoice != "y" && userChoice != "n")
-    {
-        std::cout << "Start? (y/n)\n"; std::cin >> userChoice; std::cout << std::endl;
+int replayMenu(){
+    std::string userChoice;
+    while (true) {
+        std::cout << "\nSelect an option...\n 1) Retry!\n 2) Menu\n 3) Exit\n ";
+        std::cin >> userChoice; std::cout << std::endl;
+        if (userChoice == "1") {return 1;}
+        else if (userChoice == "2") {return 5;}
+        else if (userChoice == "3") {return 4;}
+        else {std::cout << "No valid option\n";};
     };
-    if (userChoice == "y") {return true;}
-        else {return false;};
-    
-}*/
-
-bool replayMenu(){
-    std::string userChoice = "☺";
-    while (userChoice != "y" && userChoice != "n")
-    {
-        std::cout << "Replay? (y/n)\n"; std::cin >> userChoice; std::cout << std::endl;
-    };
-    if (userChoice == "y") {return true;}
-        else {return false;};
+    //return 0;
 };
+
+int gameDifficultyMenu(){
+    std::string userChoice;
+    while (true) {
+        std::cout << "\nSelect an option...\n 1) Easy\n 2) Normal ";
+        std::cout << "\n 3) Hard\n 4) Demon\n 5)Back to difficulty Menu\n";
+        std::cin >> userChoice; std::cout << std::endl;
+        if (userChoice == "1") {difficulty = 5; difficultyName = "Easy"; return 2;}
+        else if (userChoice == "2") {difficulty = 2; difficultyName = "Normal"; return 2;}
+        else if (userChoice == "3") {difficulty = 1; difficultyName = "Hard";return 2;}
+        else if (userChoice == "4") {difficulty = 0.1; difficultyName = "Demon"; return 2;}
+        else if (userChoice == "5") {return 2;}
+        else {std::cout << "No valid option\n";};
+    };
+    return 1;
+}
+
+int gasolineMenu() {
+    std::string userChoice;
+    while (true) {
+        std::cout << "\nSelect an option...\n 1) 50 %\n 2) 100 %";
+        std::cout << "\n 3) 200\n 4) Inf\n 5)Back to difficulty Menu\n";
+        std::cin >> userChoice; std::cout << std::endl;
+        if (userChoice == "1") {combustible = 50; return 2;}
+        else if (userChoice == "2") {combustible = 100; return 2;}
+        else if (userChoice == "3") {combustible = 200; return 2;}
+        else if (userChoice == "4") {combustible = 999999999; return 2;}
+        else if (userChoice == "5") {return 2;}
+        else {std::cout << "No valid option\n";};
+    };
+    return 1; 
+}
+
+
+int difficultyMenu(){
+    std::string userChoice;
+    while (true) {
+        std::cout << "\nSelect an option...\n 1) Game Difficulty: " << difficultyName << "\n 2) Progressive Difficulty: " << progressiveDif;
+        std::cout << "\n 3) Gasoline: " <<  combustible <<" %\n 4) Back to Menu\n";
+        std::cin >> userChoice; std::cout << std::endl;
+        if (userChoice == "1") {
+            int userChoice2 = gameDifficultyMenu();
+            return userChoice2;}
+        else if (userChoice == "2") {progressiveDif = !progressiveDif; return 2;}
+        else if (userChoice == "3") {
+            int userChoice3 = gasolineMenu();
+            return userChoice3;
+        }
+        else if (userChoice == "4") {return 5;}
+        else {std::cout << "No valid option\n";};
+    };
+    return 1;
+}
+
+int personalizationMenu() {
+    std::string userChoice;
+    while (true) {
+        std::cout << "\nSelect an option...\n 1) Car: " << Car1 << DEFAULT << "\n 2) Obstacles";
+        std::cout << "\n 3) Track\n 4) Back to Menu\n";
+        std::cin >> userChoice; std::cout << std::endl;
+        if (userChoice == "1") {return 3;}
+        else if (userChoice == "2") {return 3;}
+        else if (userChoice == "3") {return 3;}
+        else if (userChoice == "4") {return 5;}
+        else {std::cout << "No valid option\n";};
+    };
+    return 1;
+}
 
 int main() {
     std::srand(static_cast<unsigned>(time(0)));  // Inicializa la semilla para los obstáculos
@@ -236,9 +310,12 @@ int main() {
 
     while (true)
     {
-        if (menuSelection == 1) {jugar();};
-
-        menuSelection = replayMenu();
+        if (menuSelection == 1) {jugar(); menuSelection = replayMenu();}
+        else if (menuSelection == 2) {menuSelection = difficultyMenu();}
+        else if (menuSelection == 3) {menuSelection = personalizationMenu();}
+        else if(menuSelection == 5) {menuSelection = gameMenu();}
+        else {std::cout << "Quiting Game...";break; return 0;}
+        
     };
 
     return 0;
