@@ -195,13 +195,13 @@ void play( Game& CarSimulator)
         if (_kbhit()) 
         {  
             char tecla = _getch(); // Si se presiona una tecla
-            if ((tecla == 'w'||tecla == 'W') && carCoordY > 0) // Subir carril
+            if ((tecla == 'w'||tecla == 'W') && car1.getCoordY() > 0) // Subir carril
             {car1.setCoordY(car1.getCoordY() - 1); } 
-            else if ((tecla == 's'||tecla == 'S') && carCoordY < ROWS - 1) // Bajar carril
+            else if ((tecla == 's'||tecla == 'S') && car1.getCoordY() < ROWS - 1) // Bajar carril
             {car1.setCoordY(car1.getCoordY() + 1);} 
-            else if ((tecla == 'a'||tecla == 'A') && carCoordX > 0) // Mover a la izquierda
+            else if ((tecla == 'a'||tecla == 'A') && car1.getCoordX() > 0) // Mover a la izquierda
             {car1.setCoordX(car1.getCoordX() - 1);} 
-            else if ((tecla == 'd'||tecla == 'D') && carCoordX < COLUMNS - 3)  // Mover a la derecha
+            else if ((tecla == 'd'||tecla == 'D') && car1.getCoordX() < COLUMNS - 3)  // Mover a la derecha
             {car1.setCoordX(car1.getCoordX() + 1);}
         }
 
