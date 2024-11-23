@@ -18,7 +18,7 @@ Video games have had a profound impact on today's society and culture. With over
 
 This project aims to create a car racing simulator using object-oriented programming. The simulator could serve as a tool for individuals seeking to enhance underdeveloped abilities or simply improve existing skills. The general benefits listed above form the basis of the simulator's design goals.  
 
-The object-oriented programming can be implemented by creating classes and objects that refer to the cars, environment, points, user iterface, etc.
+The object-oriented programming can be implemented by creating classes and objects that refer to the cars, environment, points, user interface, etc.
 
 ---
 
