@@ -20,6 +20,11 @@ This project aims to create a car racing simulator using object-oriented program
 
 The object-oriented programming can be implemented by creating classes and objects that refer to the cars, environment, points, user interface, etc.
 
+The project was built following the style of a 2D game.
+
+This project may not work in some especial cases due to the terminal configurations. 
+
+
 ---
 
 ## Class Diagram  
