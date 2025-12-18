@@ -20,6 +20,7 @@ class EntityProperties {
 
         // Method
         std::string getFinalShape() const;
+
         // Setters
         void setShape(const std::string&);
         void setColor(const std::string&);

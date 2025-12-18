@@ -17,6 +17,9 @@ std::string EntityProperties::getFinalShape() const
     return ansiCommand;
 }
 
+
+// Setters
+
 void EntityProperties::setShape(const std::string& newShape) {shape = newShape;}
 
 void EntityProperties::setColor(const std::string& newColor) {color = newColor;}
@@ -25,6 +28,8 @@ void EntityProperties::setName(const std::string& newName) {name = newName;}
 
 void EntityProperties::setBackground(const std::string& newBackground) {background = newBackground;}
 
+
+// Getters
 
 std::string EntityProperties::getShape() const {return shape;}
 

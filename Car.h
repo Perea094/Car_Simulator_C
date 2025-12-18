@@ -3,7 +3,7 @@
 
 #include "EntityProperties.h"
 
-class Car : public EntityProperties
+class Car : public EntityProperties // Herencia de EntityProperties
 {
     private:
         int fuel;
